@@ -1,4 +1,4 @@
-use std::io::BufReader;
+use std::io::BufRead;
 
 use ::error::ErrorKind;
 use ::error::Result;
@@ -12,9 +12,8 @@ pub struct RetrievalCommand {
 
 
 impl RetrievalCommand {
-    pub fn parse(buf: &[u8]) -> Result<RetrievalCommand> {
-        let mut reader = BufReader::new(buf);
-        let cmd_line = try!(read_until(&mut reader, "\r\n"));
+    pub fn parse<R: BufRead>(reader: &mut R) -> Result<RetrievalCommand> {
+        let cmd_line = try!(read_until(reader, "\r\n"));
         let cmd_str = try!(String::from_utf8(cmd_line));
         let segments = cmd_str.split_whitespace().collect::<Vec<&str>>();
         let length = segments.len();

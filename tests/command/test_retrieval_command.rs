@@ -1,3 +1,4 @@
+use std::io::BufReader;
 use memcached_protocal::RetrievalCommand;
 
 
@@ -5,7 +6,7 @@ use memcached_protocal::RetrievalCommand;
 fn test_parse_get() {
     let data = "get key\r\n".as_bytes();
 
-    let cmd1 = RetrievalCommand::parse(&data).unwrap();
+    let cmd1 = RetrievalCommand::parse(&mut BufReader::new(data)).unwrap();
     assert_eq!(cmd1,
   	 	RetrievalCommand{
     		command_name: "get".to_owned(),
@@ -18,7 +19,7 @@ fn test_parse_get() {
 fn test_parse_gets() {
     let data = "gets key1 key2\r\n".as_bytes();
 
-    let cmd1 = RetrievalCommand::parse(&data).unwrap();
+    let cmd1 = RetrievalCommand::parse(&mut BufReader::new(data)).unwrap();
     assert_eq!(cmd1,
   	 	RetrievalCommand{
     		command_name: "gets".to_owned(),

@@ -1,4 +1,5 @@
 use std::io::BufReader;
+use std::io::Read;
 
 use ::error::ErrorKind;
 use ::error::Result;
@@ -13,7 +14,7 @@ pub struct DeletionCommand {
 
 
 impl DeletionCommand {
-    pub fn parse(buf: &[u8]) -> Result<DeletionCommand> {
+    pub fn parse<R: Read>(buf: R) -> Result<DeletionCommand> {
         let mut reader = BufReader::new(buf);
         let cmd_line = try!(read_until(&mut reader, "\r\n"));
         let cmd_str = try!(String::from_utf8(cmd_line));
