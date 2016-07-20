@@ -1,0 +1,8 @@
+[package]
+authors = ["Alex.F <gfreezy@gmail.com>"]
+name = "memcached-protocal"
+version = "0.1.0"
+
+[dependencies]
+error-chain = "0.1.12"
+nom = "1.2.3"
