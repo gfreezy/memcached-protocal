@@ -10,12 +10,16 @@ pub use command::store_command::StoreCommand;
 pub use command::retrieval_command::RetrievalCommand;
 pub use command::deletion_command::DeletionCommand;
 pub use command::command::parse;
+pub use command::command::Command;
 pub use command::command::Command::Delete;
 pub use command::command::Command::Retrieval;
 pub use command::command::Command::Store;
 pub use error::Result;
+pub use error::Error;
+pub use error::ErrorKind;
 
 pub use response::deletion_response::DeleteResponse;
 pub use response::retrieval_response::RetrievalResponse;
 pub use response::retrieval_response::RetrievalResponseItem;
 pub use response::store_response::StoreResponse;
+pub use response::response::Response;

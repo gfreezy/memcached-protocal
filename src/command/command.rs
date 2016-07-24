@@ -5,6 +5,7 @@ use super::store_command::StoreCommand;
 
 use ::error::Result;
 use ::error::ErrorKind;
+use ::byte_utils::peek_until;
 
 
 #[derive(Debug, PartialEq)]
@@ -18,14 +19,13 @@ pub enum Command {
 pub fn parse<R: BufRead>(reader: &mut R) -> Result<Command> {
     use self::Command::*;
 
-    let cmd_str;
-    {
-        let buf = try!(reader.fill_buf());
-        cmd_str = String::from_utf8_lossy(buf).into_owned();
-    }
+    let buf = try!(peek_until(reader, "\r\n"));
+    let len = buf.len();
+    let cmd_str = try!(String::from_utf8(buf));
     let segments = cmd_str.split_whitespace().collect::<Vec<&str>>();
     let length = segments.len();
     if length < 1 {
+        reader.consume(len);
         return Err(ErrorKind::ClientError("wrong size of params".to_owned()).into());
     }
     let cmd = segments[0];
@@ -33,6 +33,9 @@ pub fn parse<R: BufRead>(reader: &mut R) -> Result<Command> {
         "set" | "add" | "replace" | "append" | "prepend" | "cas" => Store(try!(StoreCommand::parse(reader))),
         "get" | "gets" => Retrieval(try!(RetrievalCommand::parse(reader))),
         "delete" => Delete(try!(DeletionCommand::parse(reader))),
-        _ => return Err(ErrorKind::ClientError("not supported command".to_owned()).into()),
+        _ => {
+            reader.consume(len);
+            return Err(ErrorKind::ClientError("not supported command".to_owned()).into())
+        },
     })
 }

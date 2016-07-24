@@ -1,5 +1,4 @@
-use std::io::BufReader;
-use std::io::Read;
+use std::io::BufRead;
 
 use ::error::ErrorKind;
 use ::error::Result;
@@ -14,9 +13,8 @@ pub struct DeletionCommand {
 
 
 impl DeletionCommand {
-    pub fn parse<R: Read>(buf: R) -> Result<DeletionCommand> {
-        let mut reader = BufReader::new(buf);
-        let cmd_line = try!(read_until(&mut reader, "\r\n"));
+    pub fn parse<R: BufRead>(reader: &mut R) -> Result<DeletionCommand> {
+        let cmd_line = try!(read_until(reader, "\r\n"));
         let cmd_str = try!(String::from_utf8(cmd_line));
         let segments = cmd_str.split_whitespace().collect::<Vec<&str>>();
         let length = segments.len();
@@ -31,7 +29,7 @@ impl DeletionCommand {
             None
         };
 
-        Ok(DeletionCommand{
+        Ok(DeletionCommand {
             command_name: cmd.to_owned(),
             key: key.to_owned(),
             noreply: noreply,

@@ -1,3 +1,5 @@
+use super::response::Response;
+use ::error::Result;
 
 #[derive(Debug)]
 pub enum DeleteResponse {
@@ -6,13 +8,13 @@ pub enum DeleteResponse {
 }
 
 
-impl DeleteResponse {
-    pub fn to_bytes(&self) -> &'static [u8] {
+impl Response for DeleteResponse {
+    fn to_bytes(&self) -> Result<Vec<u8>> {
         use self::DeleteResponse::*;
 
-        match *self {
-            Deleted => b"DELETED\r\n",
-            NotFound => b"NOT_FOUND\r\n",
-        }
+        Ok(match *self {
+            Deleted => b"DELETED\r\n".to_vec(),
+            NotFound => b"NOT_FOUND\r\n".to_vec(),
+        })
     }
 }

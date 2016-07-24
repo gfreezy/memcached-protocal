@@ -1,3 +1,7 @@
+use ::error::Result;
+
+use super::response::Response;
+
 
 #[derive(Debug)]
 pub enum StoreResponse {
@@ -8,15 +12,15 @@ pub enum StoreResponse {
 }
 
 
-impl StoreResponse {
-    pub fn to_bytes(&self) -> &'static [u8] {
+impl Response for StoreResponse {
+    fn to_bytes(&self) -> Result<Vec<u8>> {
         use self::StoreResponse::*;
 
-        match *self {
-            Stored => b"STORED\r\n",
-            NotStored => b"NOT_STORED\r\n",
-            Exists => b"EXISTS\r\n",
-            NotFound => b"NOT_FOUND\r\n",
-        }
+        Ok(match *self {
+            Stored => b"STORED\r\n".to_vec(),
+            NotStored => b"NOT_STORED\r\n".to_vec(),
+            Exists => b"EXISTS\r\n".to_vec(),
+            NotFound => b"NOT_FOUND\r\n".to_vec(),
+        })
     }
 }

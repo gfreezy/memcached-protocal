@@ -18,13 +18,21 @@ fn test_parse_with_noreply() {
 
 #[test]
 fn test_parse_without_noreply() {
-    let mut data = BufReader::new("delete key\r\n".as_bytes());
+    let mut data = BufReader::new("delete key\r\ndelete key2\r\nk".as_bytes());
 
     let cmd1 = DeletionCommand::parse(&mut data).unwrap();
     assert_eq!(cmd1,
   	 	DeletionCommand{
     		command_name: "delete".to_owned(),
     		key: "key".to_owned(),
+    		noreply: None,
+    	}
+  	);
+    let cmd1 = DeletionCommand::parse(&mut data).unwrap();
+    assert_eq!(cmd1,
+  	 	DeletionCommand{
+    		command_name: "delete".to_owned(),
+    		key: "key2".to_owned(),
     		noreply: None,
     	}
   	);

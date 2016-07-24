@@ -1,8 +1,12 @@
 [package]
 authors = ["Alex.F <gfreezy@gmail.com>"]
 name = "memcached-protocal"
-version = "0.1.0"
+version = "0.1.11"
+description = "Memcached Text Protocal"
+homepage = "https://github.com/gfreezy/memcached-protocal"
+repository = "https://github.com/gfreezy/memcached-protocal"
+keywords = ["memcached", "protocal"]
+license = "MIT"
 
 [dependencies]
-error-chain = "0.1.12"
-nom = "1.2.3"
+error-chain = "0.2"

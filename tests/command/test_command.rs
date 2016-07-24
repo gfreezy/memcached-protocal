@@ -2,7 +2,6 @@ use std::io::BufReader;
 use memcached_protocal::parse;
 use memcached_protocal::Store;
 use memcached_protocal::Retrieval;
-use memcached_protocal::Delete;
 use memcached_protocal::RetrievalCommand;
 use memcached_protocal::StoreCommand;
 
